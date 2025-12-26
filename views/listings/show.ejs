@@ -1,0 +1,386 @@
+<% layout('layout/boilerplate') -%>
+ 
+<div class="pg-info">
+
+  <div class="pg-card">
+
+    
+    <div class="pg-slider">
+      <div class="pg-slides">
+        <% listing.images.forEach((img) => { %>
+          <img src="<%= img %>" alt="PG Image">
+        <% }) %>
+      </div>
+
+      <div class="pg-dots">
+        <% listing.images.forEach((_, i) => { %>
+          <span class="dot <%= i === 0 ? 'active' : '' %>"></span>
+        <% }) %>
+      </div>
+    </div>
+
+     <div class="pg-card-body">
+      <h2 class="pg-title"><%= listing.title %></h2>
+      <p class="pg-owner">
+  <i class="fa-solid fa-user"></i>
+  Owned by <strong><%= listing.owner.name %></strong>
+</p>
+
+      <p class="pg-desc"><%= listing.description %></p>
+
+      <div class="pg-location">
+        <span class="area"><%= listing.location.area %></span>
+        <span class="landmark"><%= listing.location.landmark %></span>
+      </div>
+      <span class="pg-gender"><%= listing.gender %> PG</span>
+    </div>
+
+  </div>
+
+
+
+<!-- PRICING CARD -->
+<div class="pg-price-card">
+
+  <h3 class="section-title">Pricing</h3>
+
+  <div class="price-main">
+    <div>
+      <span class="label">Monthly Rent</span>
+      <span class="value">₹ <%= listing.pricing.rent.toLocaleString("en-IN") %></span>
+    </div>
+
+    <div>
+      <span class="label">Deposit</span>
+      <span class="value">₹ <%= listing.pricing.deposit.toLocaleString("en-IN") %></span>
+    </div>
+  </div>
+
+  <div class="sharing-section">
+    <h4 class="sub-title">Sharing Options</h4>
+
+    <% listing.pricing.sharing.forEach(s => { %>
+      <div class="sharing-row">
+        <span class="sharing-type"><%= s.type %> Sharing</span>
+        <span class="sharing-price">₹ <%= s.price.toLocaleString("en-IN") %></span>
+      </div>
+    <% }) %>
+  </div>
+
+</div>
+
+
+<!-- OVERVIEW CARD -->
+<div class="pg-overview-card">
+
+  <h3 class="section-title">Overview</h3>
+
+  <div class="overview-row">
+    <span class="overview-label">Food</span>
+    <span class="overview-value"><%= listing.overview.food %></span>
+  </div>
+
+  <div class="overview-row">
+    <span class="overview-label">Gate Time</span>
+    <span class="overview-value"><%= listing.overview.gateTime %></span>
+  </div>
+
+  <div class="overview-row">
+    <span class="overview-label">Preferred For</span>
+    <span class="overview-value"><%= listing.overview.PreferredFor %></span>
+  </div>
+</div>
+
+
+<!-- AMENITIES -->
+<div class="pg-amenities-card">
+
+  <h3 class="section-title">Amenities</h3>
+
+  <% if (listing.amenities && listing.amenities.length > 0) { %>
+    <div class="amenities-grid">
+      <% listing.amenities.forEach(item => { %>
+        <div class="amenity-item">
+          <i class="fa-solid fa-check"></i>
+          <span><%= item %></span>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="empty-text">No amenities information available</p>
+  <% } %>
+
+</div>
+
+
+</div>
+
+
+ <style>
+
+ .pg-info {
+  padding: 12px;
+}
+
+ .pg-card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+ .pg-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.pg-slides {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.pg-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.pg-slides img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+ .pg-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+}
+
+.dot.active {
+  background: #ff5a7a;
+}
+
+ .pg-card-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+ .pg-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+}
+
+ .pg-owner {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+ .pg-desc {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+ .pg-location {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.pg-location .area {
+  font-weight: 600;
+  color: #111827;
+}
+
+ .pg-gender {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ff5a7a;
+  background: #fff1f4;
+  border-radius: 12px;
+} 
+.pg-owner i {
+  margin-right: 4px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* PRICING CARD */
+.pg-price-card {
+  margin-top: 12px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Section title */
+.section-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Rent + Deposit */
+.price-main {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.price-main .label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.price-main .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff5a7a;
+}
+
+/* Sharing section */
+.sub-title {
+  margin: 8px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.sharing-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.sharing-row:last-child {
+  border-bottom: none;
+}
+
+.sharing-type {
+  font-size: 13px;
+  color: #374151;
+}
+
+.sharing-price {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* OVERVIEW CARD */
+.pg-overview-card {
+  margin-top: 12px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.overview-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.overview-row:last-child {
+  border-bottom: none;
+}
+
+.overview-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.overview-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+
+/* AMENITIES CARD */
+.pg-amenities-card {
+  margin-top: 12px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* GRID */
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* ITEM */
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.amenity-item i {
+  color: #ff5a7a;
+  font-size: 12px;
+}
+
+/* EMPTY STATE */
+.empty-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+
+</style> 
+
+
+<script>
+  const slider = document.querySelector(".pg-slides");
+  const dots = document.querySelectorAll(".dot");
+
+  if (slider) {
+    slider.addEventListener("scroll", () => {
+      const index = Math.round(
+        slider.scrollLeft / slider.clientWidth
+      );
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+    });
+  }
+</script>
