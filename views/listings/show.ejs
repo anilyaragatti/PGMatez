@@ -112,6 +112,59 @@
 
 </div>
 
+<!-- PG RULES -->
+<div class="pg-rules-card">
+
+  <h3 class="section-title">PG Rules</h3>
+
+  <% if (listing.rules && listing.rules.length > 0) { %>
+    <ul class="rules-list">
+      <% listing.rules.forEach(rule => { %>
+        <li>
+          <i class="fa-solid fa-circle-check"></i>
+          <span><%= rule %></span>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="empty-text">No rules mentioned by the owner</p>
+  <% } %>
+
+</div>
+
+
+<!-- OWNER CONTACT -->
+<div class="pg-contact-card">
+
+  <h3 class="section-title">Contact Owner</h3>
+
+  <div class="owner-info">
+    <i class="fa-solid fa-user"></i>
+    <div>
+      <p class="owner-name"><%= listing.owner.name %></p>
+      <p class="owner-phone"><%= listing.owner.phone %></p>
+    </div>
+  </div>
+
+  <div class="contact-actions">
+    <a href="tel:<%= listing.owner.phone %>" class="btn call-btn">
+      <i class="fa-solid fa-phone"></i>
+      Call
+    </a>
+
+    <a 
+      href="https://wa.me/91<%= listing.owner.phone %>" 
+      target="_blank"
+      class="btn whatsapp-btn"
+    >
+      <i class="fa-brands fa-whatsapp"></i>
+      WhatsApp
+    </a>
+  </div>
+
+</div>
+
+
 
 </div>
 
@@ -363,6 +416,113 @@
   font-size: 13px;
   color: #6b7280;
 }
+
+
+/* RULES CARD */
+.pg-rules-card {
+  margin-top: 12px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* RULES LIST */
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.rules-list i {
+  color: #ff5a7a;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+/* EMPTY STATE */
+.empty-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* CONTACT CARD */
+.pg-contact-card {
+  margin-top: 12px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* OWNER INFO */
+.owner-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.owner-info i {
+  font-size: 20px;
+  color: #ff5a7a;
+}
+
+.owner-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.owner-phone {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* BUTTONS */
+.contact-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.call-btn {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.whatsapp-btn {
+  background: #25d366;
+  color: #ffffff;
+}
+
 
 
 </style> 

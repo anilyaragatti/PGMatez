@@ -27,18 +27,27 @@ async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/PGMate');
 }
 
-
+//index route
 app.get("/listing", async(req,res)=>{
     const allListing = await Listing.find({});
     res.render("listings/index", { allListing });
-})
+});
 
+//new route
+app.get("/listing/new",(req,res)=>{
+    res.render("listings/new")
+}
+);
+
+
+// show route
 app.get("/listing/:id",async(req,res)=>{
     const {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/show" ,{listing})
  
 })
+
 
 
 
