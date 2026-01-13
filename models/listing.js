@@ -74,7 +74,7 @@ const listingSchema = new Schema({
   overview: {
     food: {
       type: [String],
-      enum: ["Breakfast", "Lunch", "Dinner","yes","no"],
+      enum: ["Breakfast", "Lunch", "Dinner","Yes","no"],
     default: []
     },
     gateTime: {
