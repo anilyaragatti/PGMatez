@@ -98,6 +98,129 @@
   </p>
 </div>
 
+<!-- PRICING -->
+<div class="form-card">
+  <h3 class="form-section-title">Pricing</h3>
+
+  <!-- RENT -->
+  <div class="form-group">
+    <label>Monthly Rent (₹)</label>
+    <input
+      type="number"
+      name="pricing[rent]"
+      placeholder="e.g. 8500"
+      required
+    >
+  </div>
+
+  <!-- DEPOSIT -->
+  <div class="form-group">
+    <label>Deposit (₹)</label>
+    <input
+      type="number"
+      name="pricing[deposit]"
+      placeholder="e.g. 15000"
+    >
+  </div>
+
+  <!-- SHARING OPTIONS -->
+  <h4 class="mini-title">Sharing Options</h4>
+
+  <div id="sharingContainer">
+    <div class="sharing-row">
+      <select name="pricing[sharing][0][type]" required>
+        <option value="">Select sharing</option>
+        <option>Single</option>
+        <option>Double</option>
+        <option>Triple</option>
+        <option>Four</option>
+        <option>Five</option>
+      </select>
+
+      <input
+        type="number"
+        name="pricing[sharing][0][price]"
+        placeholder="Price"
+        required
+      >
+    </div>
+  </div>
+
+  <button type="button" class="secondary-btn" id="addSharingBtn">
+    + Add Sharing Option
+  </button>
+
+  <p class="hint-text">Maximum 5 sharing options allowed</p>
+</div>
+
+
+
+<!-- OVERVIEW -->
+<div class="form-card">
+  <h3 class="form-section-title">Overview</h3>
+
+  <!-- FOOD -->
+  <div class="form-group">
+    <label>Food Available</label>
+    <div class="option-row">
+      <label><input type="checkbox" name="overview[food][]" value="Breakfast"> Breakfast</label>
+      <label><input type="checkbox" name="overview[food][]" value="Lunch"> Lunch</label>
+      <label><input type="checkbox" name="overview[food][]" value="Dinner"> Dinner</label>
+    </div>
+  </div>
+
+  <!-- GATE TIME (12H FORMAT) -->
+  <div class="form-group">
+    <label>Gate Closing Time</label>
+
+    <div class="time-row">
+      <select name="overview[gateHour]" required>
+        <option value="">HH</option>
+        <% for(let i=1;i<=12;i++){ %>
+          <option value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+
+      <select name="overview[gateMinute]" required>
+        <option value="">MM</option>
+        <option>00</option>
+        <option>15</option>
+        <option>30</option>
+        <option>45</option>
+      </select>
+
+      <select name="overview[gatePeriod]" required>
+        <option value="">AM/PM</option>
+        <option>AM</option>
+        <option>PM</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- PREFERRED FOR -->
+  <div class="form-group">
+    <label>Preferred For</label>
+    <div class="pill-row">
+      <label class="pill">
+        <input type="radio" name="preferredFor" value="Students" required>
+        Students
+      </label>
+
+      <label class="pill">
+        <input type="radio" name="preferredFor" value="Working Professionals">
+        Working Professionals
+      </label>
+
+      <label class="pill">
+        <input type="radio" name="preferredFor" value="Anyone">
+        Anyone
+      </label>
+    </div>
+  </div>
+</div>
+
+
+
 
   </form>
 </div>
@@ -226,6 +349,90 @@
 }
 
 
+/* Pricing */
+.mini-title {
+  margin: 6px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.sharing-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sharing-row select,
+.sharing-row input {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.sharing-row select:focus,
+.sharing-row input:focus {
+  border-color: #ff5a7a;
+}
+/* remove botton */
+.sharing-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ff5a7a;
+}
+
+
+/* TIME SELECT */
+.time-row {
+  display: flex;
+  gap: 8px;
+}
+
+.time-row select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+/* PILL RADIO BUTTONS */
+.pill-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.pill input {
+  display: none;
+}
+
+.pill:has(input:checked) {
+  background: #fff1f4;
+  border-color: #ff5a7a;
+  color: #ff5a7a;
+  font-weight: 600;
+}
+
 
 </style>
 
@@ -257,5 +464,57 @@
     imageInputs.appendChild(div);
     imageCount++;
   });
+
+
+
+
+  //for pricing 
+  const addSharingBtn = document.getElementById("addSharingBtn");
+const sharingContainer = document.getElementById("sharingContainer");
+
+let sharingCount = 1;
+const MAX_SHARING = 5;
+
+addSharingBtn.addEventListener("click", () => {
+  if (sharingCount >= MAX_SHARING) {
+    alert("Maximum 5 sharing options allowed");
+    return;
+  }
+
+  const row = document.createElement("div");
+  row.className = "sharing-row";
+
+  row.innerHTML = `
+    <select name="pricing[sharing][${sharingCount}][type]" required>
+      <option value="">Select sharing</option>
+      <option>Single</option>
+      <option>Double</option>
+      <option>Triple</option>
+      <option>Four</option>
+      <option>Five</option>
+    </select>
+
+    <input
+      type="number"
+      name="pricing[sharing][${sharingCount}][price]"
+      placeholder="Price"
+      required
+    >
+
+    <button type="button" class="remove-btn">❌</button>
+  `;
+
+  // REMOVE BUTTON
+  row.querySelector(".remove-btn").addEventListener("click", () => {
+    row.remove();
+    sharingCount--;
+  });
+
+  sharingContainer.appendChild(row);
+  sharingCount++;
+});
+
+
+
 </script>
 
