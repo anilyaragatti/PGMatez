@@ -219,6 +219,132 @@
   </div>
 </div>
 
+<!-- AMENITIES -->
+<!-- AMENITIES -->
+<div class="form-card">
+  <h3 class="form-section-title">Amenities</h3>
+
+  <!-- PREDEFINED AMENITIES -->
+  <div class="checkbox-grid">
+    <label>
+      <input type="checkbox" name="amenities[]" value="WiFi">
+      WiFi
+    </label>
+
+    <label>
+      <input type="checkbox" name="amenities[]" value="Food">
+      Food
+    </label>
+
+    <label>
+      <input type="checkbox" name="amenities[]" value="Power Backup">
+      Power Backup
+    </label>
+
+    <label>
+      <input type="checkbox" name="amenities[]" value="Parking">
+      Parking
+    </label>
+
+    <label>
+      <input type="checkbox" name="amenities[]" value="Washing Machine">
+      Washing Machine
+    </label>
+
+    <label>
+      <input type="checkbox" name="amenities[]" value="CCTV">
+      CCTV
+    </label>
+  </div>
+
+  <!-- CUSTOM AMENITIES -->
+  <div class="custom-amenities">
+    <h4 class="mini-title">Add Custom Amenities</h4>
+
+    <div id="customAmenities"></div>
+
+    <button type="button" class="secondary-btn" id="addAmenityBtn">
+      + Add Custom Amenity
+    </button>
+
+    <p class="hint-text">You can add up to 3 custom amenities</p>
+  </div>
+</div>
+
+<!-- PG RULES -->
+<div class="form-card">
+  <h3 class="form-section-title">PG Rules</h3>
+
+  <!-- PREDEFINED RULES -->
+  <div class="option-row">
+    <label>
+      <input type="checkbox" name="rules[]" value="No Smoking">
+      No Smoking
+    </label>
+
+    <label>
+      <input type="checkbox" name="rules[]" value="No Alcohol">
+      No Alcohol
+    </label>
+
+    <label>
+      <input type="checkbox" name="rules[]" value="No Outside Food">
+      No Outside Food
+    </label>
+
+    <label>
+      <input type="checkbox" name="rules[]" value="Visitors Allowed">
+      Visitors Allowed
+    </label>
+  </div>
+
+  <!-- CUSTOM RULES -->
+  <div id="customRules"></div>
+
+  <button type="button" class="secondary-btn" id="addRuleBtn">
+    + Add Custom Rule
+  </button>
+
+  <p class="hint-text">You can add up to 3 custom rules</p>
+</div>
+
+
+<!-- OWNER CONTACT -->
+<div class="form-card">
+  <h3 class="form-section-title">Owner Contact</h3>
+
+  <div class="form-group">
+    <label>Owner Name</label>
+    <input
+      type="text"
+      name="owner[name]"
+      placeholder="e.g. Ramesh Kumar"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label>Phone Number</label>
+    <input
+      type="tel"
+      name="owner[phone]"
+      placeholder="10-digit mobile number"
+      pattern="[0-9]{10}"
+      required
+    >
+  </div>
+
+  <p class="hint-text">
+    This number will be shown to users for Call & WhatsApp
+  </p>
+</div>
+
+
+<button type="submit" class="primary-btn">
+  Create PG Listing
+</button>
+
+
 
 
 
@@ -434,6 +560,84 @@
 }
 
 
+/* Amenities grid */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.checkbox-grid label {
+  font-size: 13px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Custom amenities */
+.custom-amenities {
+  margin-top: 10px;
+}
+
+.mini-title {
+  margin: 6px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.custom-amenity-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.custom-amenity-row input {
+  flex: 1;
+}
+.custom-amenity-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.remove-btn {
+  border: none;
+  background: #ffe4e6;
+  color: #e11d48;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+
+
+.custom-rule-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.custom-rule-row input {
+  flex: 1;
+}
+
+.remove-btn {
+  border: none;
+  background: #ffe4e6;
+  color: #e11d48;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+
 </style>
 
 
@@ -513,8 +717,78 @@ addSharingBtn.addEventListener("click", () => {
   sharingContainer.appendChild(row);
   sharingCount++;
 });
-
-
-
 </script>
 
+<!-- amenities -->
+ <script>
+  const addAmenityBtn = document.getElementById("addAmenityBtn");
+  const customAmenities = document.getElementById("customAmenities");
+
+  let customAmenityCount = 0;
+  const MAX_CUSTOM_AMENITIES = 3;
+
+  addAmenityBtn.addEventListener("click", () => {
+    if (customAmenityCount >= MAX_CUSTOM_AMENITIES) {
+      alert("You can add only 3 custom amenities");
+      return;
+    }
+
+    const div = document.createElement("div");
+    div.className = "custom-amenity-row";
+
+    div.innerHTML = `
+      <input 
+        type="text" 
+        name="amenities[]" 
+        placeholder="e.g. Gym, Lift, RO Water"
+      >
+      <button type="button" class="remove-btn">✕</button>
+    `;
+
+    // REMOVE BUTTON LOGIC
+    div.querySelector(".remove-btn").addEventListener("click", () => {
+      div.remove();
+      customAmenityCount--;
+    });
+
+    customAmenities.appendChild(div);
+    customAmenityCount++;
+  });
+</script>
+
+
+<!-- for rules -->
+<script>
+  const addRuleBtn = document.getElementById("addRuleBtn");
+  const customRules = document.getElementById("customRules");
+
+  let ruleCount = 0;
+  const MAX_RULES = 3;
+
+  addRuleBtn.addEventListener("click", () => {
+    if (ruleCount >= MAX_RULES) {
+      alert("You can add only 3 custom rules");
+      return;
+    }
+
+    const div = document.createElement("div");
+    div.className = "custom-rule-row";
+
+    div.innerHTML = `
+      <input
+        type="text"
+        name="rules[]"
+        placeholder="e.g. Silence after 10 PM"
+      >
+      <button type="button" class="remove-btn">✕</button>
+    `;
+
+    div.querySelector(".remove-btn").addEventListener("click", () => {
+      div.remove();
+      ruleCount--;
+    });
+
+    customRules.appendChild(div);
+    ruleCount++;
+  });
+</script>
