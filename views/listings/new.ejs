@@ -13,21 +13,21 @@
 
       <div class="form-group">
         <label>PG Title </label>
-        <input type="text" name="title" placeholder="e.g. Sunrise Boys PG" required>
+        <input type="text" name="listing[title]" placeholder="e.g. Sunrise Boys PG" required>
       </div>
 
       <div class="form-group">
         <label>Description </label>
-        <textarea name="description" rows="3"
+        <textarea name="listing[description]" rows="3"
           placeholder="Short description about the PG" required></textarea>
       </div>
 
       <div class="form-group">
         <label>Gender </label>
         <div class="option-row">
-          <label><input type="radio" name="gender" value="Male" required> Male</label>
-          <label><input type="radio" name="gender" value="Female"> Female</label>
-          <label><input type="radio" name="gender" value="Any"> Any</label>
+          <label><input type="radio" name="listing[gender]" value="Male" required> Male</label>
+          <label><input type="radio" name="listing[gender]" value="Female"> Female</label>
+          <label><input type="radio" name="listing[gender]" value="Any"> Any</label>
         </div>
       </div>
 
@@ -35,11 +35,11 @@
         <label>Preferred For</label>
         <div class="option-row">
           <label>
-            <input type="checkbox" name="preferredFor[]" value="Students">
+            <input type="checkbox" name="listing[preferredFor][]" value="Students">
             Students
           </label>
           <label>
-            <input type="checkbox" name="preferredFor[]" value="Working Professionals">
+            <input type="checkbox" name="listing[preferredFor][]" value="Working Professionals">
             Working Professionals
           </label>
         </div>
@@ -52,17 +52,17 @@
 
       <div class="form-group">
         <label>City </label>
-        <input type="text" name="location[city]" placeholder="City name" required>
+        <input type="text" name="listing[location][city]" placeholder="City name" required>
       </div>
 
       <div class="form-group">
         <label>Area </label>
-        <input type="text" name="location[area]" placeholder="Area / Locality" required>
+        <input type="text" name="listing[location][area]" placeholder="Area / Locality" required>
       </div>
 
       <div class="form-group">
         <label>Landmark</label>
-        <input type="text" name="location[landmark]" placeholder="Nearby landmark">
+        <input type="text" name="listing[location][landmark]" placeholder="Nearby landmark">
       </div>
     </div>
 
@@ -83,7 +83,7 @@
     <div class="form-group">
       <input 
         type="url" 
-        name="images[]" 
+        name="listing[images][]" 
         placeholder="Paste image URL"
       >
     </div>
@@ -107,7 +107,7 @@
     <label>Monthly Rent (₹)</label>
     <input
       type="number"
-      name="pricing[rent]"
+      name="listing[pricing][rent]"
       placeholder="e.g. 8500"
       required
     >
@@ -118,7 +118,7 @@
     <label>Deposit (₹)</label>
     <input
       type="number"
-      name="pricing[deposit]"
+      name="listing[pricing][deposit]"
       placeholder="e.g. 15000"
     >
   </div>
@@ -128,7 +128,7 @@
 
   <div id="sharingContainer">
     <div class="sharing-row">
-      <select name="pricing[sharing][0][type]" required>
+      <select name="listing[pricing][sharing][0][type]" required>
         <option value="">Select sharing</option>
         <option>Single</option>
         <option>Double</option>
@@ -139,7 +139,7 @@
 
       <input
         type="number"
-        name="pricing[sharing][0][price]"
+        name="listing[pricing][sharing][0][price]"
         placeholder="Price"
         required
       >
@@ -163,9 +163,9 @@
   <div class="form-group">
     <label>Food Available</label>
     <div class="option-row">
-      <label><input type="checkbox" name="overview[food][]" value="Breakfast"> Breakfast</label>
-      <label><input type="checkbox" name="overview[food][]" value="Lunch"> Lunch</label>
-      <label><input type="checkbox" name="overview[food][]" value="Dinner"> Dinner</label>
+      <label><input type="checkbox" name="listing[overview][food][]" value="Breakfast"> Breakfast</label>
+      <label><input type="checkbox" name="listing[overview][food][]" value="Lunch"> Lunch</label>
+      <label><input type="checkbox" name="listing[overview][food][]" value="Dinner"> Dinner</label>
     </div>
   </div>
 
@@ -174,14 +174,14 @@
     <label>Gate Closing Time</label>
 
     <div class="time-row">
-      <select name="overview[gateHour]" required>
+      <select name="listing[overview][gateHour]" required>
         <option value="">HH</option>
         <% for(let i=1;i<=12;i++){ %>
           <option value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
 
-      <select name="overview[gateMinute]" required>
+      <select name="listing[overview][gateMinute]" required>
         <option value="">MM</option>
         <option>00</option>
         <option>15</option>
@@ -189,7 +189,7 @@
         <option>45</option>
       </select>
 
-      <select name="overview[gatePeriod]" required>
+      <select name="listing[overview][gatePeriod]" required>
         <option value="">AM/PM</option>
         <option>AM</option>
         <option>PM</option>
@@ -202,17 +202,17 @@
     <label>Preferred For</label>
     <div class="pill-row">
       <label class="pill">
-        <input type="radio" name="preferredFor" value="Students" required>
+        <input type="radio" name="listing[preferredFor]" value="Students" required>
         Students
       </label>
 
       <label class="pill">
-        <input type="radio" name="preferredFor" value="Working Professionals">
+        <input type="radio" name="listing[preferredFor]" value="Working Professionals">
         Working Professionals
       </label>
 
       <label class="pill">
-        <input type="radio" name="preferredFor" value="Anyone">
+        <input type="radio" name="listing[preferredFor]" value="Anyone">
         Anyone
       </label>
     </div>
@@ -227,32 +227,32 @@
   <!-- PREDEFINED AMENITIES -->
   <div class="checkbox-grid">
     <label>
-      <input type="checkbox" name="amenities[]" value="WiFi">
+      <input type="checkbox" name="listing[amenities][]" value="WiFi">
       WiFi
     </label>
 
     <label>
-      <input type="checkbox" name="amenities[]" value="Food">
+      <input type="checkbox" name="listing[amenities][]" value="Food">
       Food
     </label>
 
     <label>
-      <input type="checkbox" name="amenities[]" value="Power Backup">
+      <input type="checkbox" name="listing[amenities][]" value="Power Backup">
       Power Backup
     </label>
 
     <label>
-      <input type="checkbox" name="amenities[]" value="Parking">
+      <input type="checkbox" name="listing[amenities][]" value="Parking">
       Parking
     </label>
 
     <label>
-      <input type="checkbox" name="amenities[]" value="Washing Machine">
+      <input type="checkbox" name="listing[amenities][]" value="Washing Machine">
       Washing Machine
     </label>
 
     <label>
-      <input type="checkbox" name="amenities[]" value="CCTV">
+      <input type="checkbox" name="listing[amenities][]" value="CCTV">
       CCTV
     </label>
   </div>
@@ -278,22 +278,22 @@
   <!-- PREDEFINED RULES -->
   <div class="option-row">
     <label>
-      <input type="checkbox" name="rules[]" value="No Smoking">
+      <input type="checkbox" name="listing[rules][]" value="No Smoking">
       No Smoking
     </label>
 
     <label>
-      <input type="checkbox" name="rules[]" value="No Alcohol">
+      <input type="checkbox" name="listing[rules][]" value="No Alcohol">
       No Alcohol
     </label>
 
     <label>
-      <input type="checkbox" name="rules[]" value="No Outside Food">
+      <input type="checkbox" name="listing[rules][]" value="No Outside Food">
       No Outside Food
     </label>
 
     <label>
-      <input type="checkbox" name="rules[]" value="Visitors Allowed">
+      <input type="checkbox" name="listing[rules][]" value="Visitors Allowed">
       Visitors Allowed
     </label>
   </div>
@@ -317,7 +317,7 @@
     <label>Owner Name</label>
     <input
       type="text"
-      name="owner[name]"
+      name="listing[owner][name]"
       placeholder="e.g. Ramesh Kumar"
       required
     >
@@ -327,7 +327,7 @@
     <label>Phone Number</label>
     <input
       type="tel"
-      name="owner[phone]"
+      name="listing[owner][phone]"
       placeholder="10-digit mobile number"
       pattern="[0-9]{10}"
       required

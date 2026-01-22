@@ -15,6 +15,8 @@ app.set("views", path.join(__dirname, "views"));
 app.engine('ejs', ejsMate);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+
 
 
 
@@ -48,6 +50,18 @@ app.get("/listing/:id",async(req,res)=>{
  
 })
 
+
+//create route
+app.post("/listing",async(req,res)=>{
+    let listing = req.body.listing;    //getting listing data from req.body
+    const newListing = new Listing(listing);
+    //  console.log(listing);
+    //  console.log(newListing);
+     await newListing.save();
+     res.redirect("/listing");
+
+
+})
 
 
 
