@@ -57,6 +57,12 @@ app.post("/listing",async(req,res)=>{
     const newListing = new Listing(listing);
     //  console.log(listing);
     //  console.log(newListing);
+ const { gateHour, gateMinute, gatePeriod } = req.body.listing.overview || {};
+if (gateHour && gateMinute && gatePeriod) {
+  listing.overview.gateTime = `${gateHour}:${gateMinute} ${gatePeriod}`;
+} else {
+  listing.overview.gateTime = "Not mentioned";
+}
      await newListing.save();
      res.redirect("/listing");
 

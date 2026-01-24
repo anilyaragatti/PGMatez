@@ -1,794 +1,327 @@
- <% layout('layout/boilerplate') -%>
+<% layout('layout/boilerplate') -%>
 
-<div class="form-page">
+  <div class="form-page">
 
-  <!-- PAGE TITLE -->
-  <h2 class="page-title">Create New PG</h2>
+    <!-- PAGE TITLE -->
+    <h2 class="page-title">Create New PG</h2>
 
-  <form action="/listing" method="POST" class="pg-form">
+    <form action="/listing" method="POST" class="pg-form">
 
-    <!-- BASIC DETAILS -->
-    <div class="form-card">
-      <h3 class="form-section-title">Basic Details</h3>
+      <!-- BASIC DETAILS -->
+      <div class="form-card">
+        <h3 class="form-section-title">Basic Details</h3>
 
-      <div class="form-group">
-        <label>PG Title </label>
-        <input type="text" name="listing[title]" placeholder="e.g. Sunrise Boys PG" required>
-      </div>
+        <div class="form-group">
+          <label>PG Title </label>
+          <input type="text" name="listing[title]" placeholder="e.g. Sunrise Boys PG" required>
+        </div>
 
-      <div class="form-group">
-        <label>Description </label>
-        <textarea name="listing[description]" rows="3"
-          placeholder="Short description about the PG" required></textarea>
-      </div>
+        <div class="form-group">
+          <label>Description </label>
+          <textarea name="listing[description]" rows="3" placeholder="Short description about the PG"
+            required></textarea>
+        </div>
 
-      <div class="form-group">
-        <label>Gender </label>
-        <div class="option-row">
-          <label><input type="radio" name="listing[gender]" value="Male" required> Male</label>
-          <label><input type="radio" name="listing[gender]" value="Female"> Female</label>
-          <label><input type="radio" name="listing[gender]" value="Any"> Any</label>
+        <div class="form-group">
+          <label>Gender </label>
+          <div class="option-row">
+            <label><input type="radio" name="listing[gender]" value="Male" required> Male</label>
+            <label><input type="radio" name="listing[gender]" value="Female"> Female</label>
+            <label><input type="radio" name="listing[gender]" value="Any"> Any</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Preferred For</label>
+          <div class="option-row">
+            <label>
+              <input type="checkbox" name="listing[preferredFor][]" value="Students">
+              Students
+            </label>
+            <label>
+              <input type="checkbox" name="listing[preferredFor][]" value="Working Professionals">
+              Working Professionals
+            </label>
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Preferred For</label>
-        <div class="option-row">
-          <label>
-            <input type="checkbox" name="listing[preferredFor][]" value="Students">
-            Students
-          </label>
-          <label>
-            <input type="checkbox" name="listing[preferredFor][]" value="Working Professionals">
-            Working Professionals
-          </label>
+      <!-- LOCATION -->
+      <div class="form-card">
+        <h3 class="form-section-title">Location</h3>
+
+        <div class="form-group">
+          <label>City </label>
+          <input type="text" name="listing[location][city]" placeholder="City name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Area </label>
+          <input type="text" name="listing[location][area]" placeholder="Area / Locality" required>
+        </div>
+
+        <div class="form-group">
+          <label>Landmark</label>
+          <input type="text" name="listing[location][landmark]" placeholder="Nearby landmark">
         </div>
       </div>
-    </div>
 
-    <!-- LOCATION -->
-    <div class="form-card">
-      <h3 class="form-section-title">Location</h3>
 
-      <div class="form-group">
-        <label>City </label>
-        <input type="text" name="listing[location][city]" placeholder="City name" required>
+      <!-- IMAGES -->
+      <div class="form-card">
+        <h3 class="form-section-title">PG Images</h3>
+
+        <div id="imageInputs">
+          <div class="form-group image-row">
+            <input type="file" name="listing[images][]" placeholder="Paste image URL">
+          </div>
+        </div>
+
+        <button type="button" class="secondary-btn" id="addImageBtn">
+          + Add another image
+        </button>
+
+        <p class="hint-text">
+          You can add up to 10 images
+        </p>
       </div>
 
-      <div class="form-group">
-        <label>Area </label>
-        <input type="text" name="listing[location][area]" placeholder="Area / Locality" required>
+
+      <!-- PRICING -->
+      <div class="form-card">
+        <h3 class="form-section-title">Pricing</h3>
+
+        <!-- RENT -->
+        <div class="form-group">
+          <label>Monthly Rent (₹)</label>
+          <input type="number" name="listing[pricing][rent]" placeholder="e.g. 8500" required>
+        </div>
+
+        <!-- DEPOSIT -->
+        <div class="form-group">
+          <label>Deposit (₹)</label>
+          <input type="number" name="listing[pricing][deposit]" placeholder="e.g. 15000">
+        </div>
+
+        <!-- SHARING OPTIONS -->
+        <h4 class="mini-title">Sharing Options</h4>
+
+        <div id="sharingContainer">
+          <div class="sharing-row">
+            <select name="listing[pricing][sharing][0][type]" required>
+              <option value="">Select sharing</option>
+              <option>Single</option>
+              <option>Double</option>
+              <option>Triple</option>
+              <option>Four</option>
+              <option>Five</option>
+            </select>
+
+            <input type="number" name="listing[pricing][sharing][0][price]" placeholder="Price" required>
+          </div>
+        </div>
+
+        <button type="button" class="secondary-btn" id="addSharingBtn">
+          + Add Sharing Option
+        </button>
+
+        <p class="hint-text">Maximum 5 sharing options allowed</p>
       </div>
 
-      <div class="form-group">
-        <label>Landmark</label>
-        <input type="text" name="listing[location][landmark]" placeholder="Nearby landmark">
+
+
+      <!-- OVERVIEW -->
+      <div class="form-card">
+        <h3 class="form-section-title">Overview</h3>
+
+        <!-- FOOD -->
+        <div class="form-group">
+          <label>Food Available</label>
+          <div class="option-row">
+            <label><input type="checkbox" name="listing[overview][food][]" value="Breakfast"> Breakfast</label>
+            <label><input type="checkbox" name="listing[overview][food][]" value="Lunch"> Lunch</label>
+            <label><input type="checkbox" name="listing[overview][food][]" value="Dinner"> Dinner</label>
+          </div>
+        </div>
+
+        <!-- GATE TIME (12H FORMAT) -->
+        <div class="form-group">
+          <label>Gate Closing Time</label>
+
+          <div class="time-row">
+            <select name="listing[overview][gateHour]" required>
+              <option value="">HH</option>
+              <% for(let i=1;i<=12;i++){ %>
+                <option value="<%= i %>">
+                  <%= i %>
+                </option>
+                <% } %>
+            </select>
+
+            <select name="listing[overview][gateMinute]" required>
+              <option value="">MM</option>
+              <option>00</option>
+              <option>15</option>
+              <option>30</option>
+              <option>45</option>
+            </select>
+
+            <select name="listing[overview][gatePeriod]" required>
+              <option value="">AM/PM</option>
+              <option>AM</option>
+              <option>PM</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- PREFERRED FOR -->
+        <div class="form-group">
+          <label>Preferred For</label>
+          <div class="pill-row">
+            <label class="pill">
+              <input type="radio" name="listing[preferredFor]" value="Students" required>
+              Students
+            </label>
+
+            <label class="pill">
+              <input type="radio" name="listing[preferredFor]" value="Working Professionals">
+              Working Professionals
+            </label>
+
+            <label class="pill">
+              <input type="radio" name="listing[preferredFor]" value="Anyone">
+              Anyone
+            </label>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- NEXT BUTTON -->
-    <button type="submit" class="primary-btn">
-      Save & Continue
-    </button>
+      <!-- AMENITIES -->
+      <!-- AMENITIES -->
+      <div class="form-card">
+        <h3 class="form-section-title">Amenities</h3>
+
+        <!-- PREDEFINED AMENITIES -->
+        <div class="checkbox-grid">
+          <label>
+            <input type="checkbox" name="listing[amenities][]" value="WiFi">
+            WiFi
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[amenities][]" value="Food">
+            Food
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[amenities][]" value="Power Backup">
+            Power Backup
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[amenities][]" value="Parking">
+            Parking
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[amenities][]" value="Washing Machine">
+            Washing Machine
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[amenities][]" value="CCTV">
+            CCTV
+          </label>
+        </div>
+
+        <!-- CUSTOM AMENITIES -->
+        <div class="custom-amenities">
+          <h4 class="mini-title">Add Custom Amenities</h4>
+
+          <div id="customAmenities"></div>
+
+          <button type="button" class="secondary-btn" id="addAmenityBtn">
+            + Add Custom Amenity
+          </button>
+
+          <p class="hint-text">You can add up to 3 custom amenities</p>
+        </div>
+      </div>
+
+      <!-- PG RULES -->
+      <div class="form-card">
+        <h3 class="form-section-title">PG Rules</h3>
+
+        <!-- PREDEFINED RULES -->
+        <div class="option-row">
+          <label>
+            <input type="checkbox" name="listing[rules][]" value="No Smoking">
+            No Smoking
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[rules][]" value="No Alcohol">
+            No Alcohol
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[rules][]" value="No Outside Food">
+            No Outside Food
+          </label>
+
+          <label>
+            <input type="checkbox" name="listing[rules][]" value="Visitors Allowed">
+            Visitors Allowed
+          </label>
+        </div>
+
+        <!-- CUSTOM RULES -->
+        <div id="customRules"></div>
+
+        <button type="button" class="secondary-btn" id="addRuleBtn">
+          + Add Custom Rule
+        </button>
+
+        <p class="hint-text">You can add up to 3 custom rules</p>
+      </div>
 
 
 
 
 
-    <!-- IMAGES -->
-<div class="form-card">
-  <h3 class="form-section-title">PG Images</h3>
+      <!-- OWNER CONTACT -->
+      <div class="form-card">
+        <h3 class="form-section-title">Owner Contact</h3>
 
-  <div id="imageInputs">
-    <div class="form-group">
-      <input 
-        type="url" 
-        name="listing[images][]" 
-        placeholder="Paste image URL"
-      >
-    </div>
+        <div class="form-group">
+          <label>Owner Name</label>
+          <input type="text" name="listing[owner][name]" placeholder="e.g. Ramesh Kumar" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" name="listing[owner][phone]" placeholder="10-digit mobile number" pattern="[0-9]{10}"
+            required>
+        </div>
+
+        <p class="hint-text">
+          This number will be shown to users for Call & WhatsApp
+        </p>
+      </div>
+
+
+      <button type="submit" class="primary-btn">
+        Create PG Listing
+      </button>
+
+    </form>
   </div>
 
-  <button type="button" class="secondary-btn" id="addImageBtn">
-    + Add another image
-  </button>
 
-  <p class="hint-text">
-    You can add up to 10 images
-  </p>
-</div>
 
-<!-- PRICING -->
-<div class="form-card">
-  <h3 class="form-section-title">Pricing</h3>
 
-  <!-- RENT -->
-  <div class="form-group">
-    <label>Monthly Rent (₹)</label>
-    <input
-      type="number"
-      name="listing[pricing][rent]"
-      placeholder="e.g. 8500"
-      required
-    >
-  </div>
 
-  <!-- DEPOSIT -->
-  <div class="form-group">
-    <label>Deposit (₹)</label>
-    <input
-      type="number"
-      name="listing[pricing][deposit]"
-      placeholder="e.g. 15000"
-    >
-  </div>
 
-  <!-- SHARING OPTIONS -->
-  <h4 class="mini-title">Sharing Options</h4>
 
-  <div id="sharingContainer">
-    <div class="sharing-row">
-      <select name="listing[pricing][sharing][0][type]" required>
-        <option value="">Select sharing</option>
-        <option>Single</option>
-        <option>Double</option>
-        <option>Triple</option>
-        <option>Four</option>
-        <option>Five</option>
-      </select>
+  
 
-      <input
-        type="number"
-        name="listing[pricing][sharing][0][price]"
-        placeholder="Price"
-        required
-      >
-    </div>
-  </div>
-
-  <button type="button" class="secondary-btn" id="addSharingBtn">
-    + Add Sharing Option
-  </button>
-
-  <p class="hint-text">Maximum 5 sharing options allowed</p>
-</div>
-
-
-
-<!-- OVERVIEW -->
-<div class="form-card">
-  <h3 class="form-section-title">Overview</h3>
-
-  <!-- FOOD -->
-  <div class="form-group">
-    <label>Food Available</label>
-    <div class="option-row">
-      <label><input type="checkbox" name="listing[overview][food][]" value="Breakfast"> Breakfast</label>
-      <label><input type="checkbox" name="listing[overview][food][]" value="Lunch"> Lunch</label>
-      <label><input type="checkbox" name="listing[overview][food][]" value="Dinner"> Dinner</label>
-    </div>
-  </div>
-
-  <!-- GATE TIME (12H FORMAT) -->
-  <div class="form-group">
-    <label>Gate Closing Time</label>
-
-    <div class="time-row">
-      <select name="listing[overview][gateHour]" required>
-        <option value="">HH</option>
-        <% for(let i=1;i<=12;i++){ %>
-          <option value="<%= i %>"><%= i %></option>
-        <% } %>
-      </select>
-
-      <select name="listing[overview][gateMinute]" required>
-        <option value="">MM</option>
-        <option>00</option>
-        <option>15</option>
-        <option>30</option>
-        <option>45</option>
-      </select>
-
-      <select name="listing[overview][gatePeriod]" required>
-        <option value="">AM/PM</option>
-        <option>AM</option>
-        <option>PM</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- PREFERRED FOR -->
-  <div class="form-group">
-    <label>Preferred For</label>
-    <div class="pill-row">
-      <label class="pill">
-        <input type="radio" name="listing[preferredFor]" value="Students" required>
-        Students
-      </label>
-
-      <label class="pill">
-        <input type="radio" name="listing[preferredFor]" value="Working Professionals">
-        Working Professionals
-      </label>
-
-      <label class="pill">
-        <input type="radio" name="listing[preferredFor]" value="Anyone">
-        Anyone
-      </label>
-    </div>
-  </div>
-</div>
-
-<!-- AMENITIES -->
-<!-- AMENITIES -->
-<div class="form-card">
-  <h3 class="form-section-title">Amenities</h3>
-
-  <!-- PREDEFINED AMENITIES -->
-  <div class="checkbox-grid">
-    <label>
-      <input type="checkbox" name="listing[amenities][]" value="WiFi">
-      WiFi
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[amenities][]" value="Food">
-      Food
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[amenities][]" value="Power Backup">
-      Power Backup
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[amenities][]" value="Parking">
-      Parking
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[amenities][]" value="Washing Machine">
-      Washing Machine
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[amenities][]" value="CCTV">
-      CCTV
-    </label>
-  </div>
-
-  <!-- CUSTOM AMENITIES -->
-  <div class="custom-amenities">
-    <h4 class="mini-title">Add Custom Amenities</h4>
-
-    <div id="customAmenities"></div>
-
-    <button type="button" class="secondary-btn" id="addAmenityBtn">
-      + Add Custom Amenity
-    </button>
-
-    <p class="hint-text">You can add up to 3 custom amenities</p>
-  </div>
-</div>
-
-<!-- PG RULES -->
-<div class="form-card">
-  <h3 class="form-section-title">PG Rules</h3>
-
-  <!-- PREDEFINED RULES -->
-  <div class="option-row">
-    <label>
-      <input type="checkbox" name="listing[rules][]" value="No Smoking">
-      No Smoking
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[rules][]" value="No Alcohol">
-      No Alcohol
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[rules][]" value="No Outside Food">
-      No Outside Food
-    </label>
-
-    <label>
-      <input type="checkbox" name="listing[rules][]" value="Visitors Allowed">
-      Visitors Allowed
-    </label>
-  </div>
-
-  <!-- CUSTOM RULES -->
-  <div id="customRules"></div>
-
-  <button type="button" class="secondary-btn" id="addRuleBtn">
-    + Add Custom Rule
-  </button>
-
-  <p class="hint-text">You can add up to 3 custom rules</p>
-</div>
-
-
-<!-- OWNER CONTACT -->
-<div class="form-card">
-  <h3 class="form-section-title">Owner Contact</h3>
-
-  <div class="form-group">
-    <label>Owner Name</label>
-    <input
-      type="text"
-      name="listing[owner][name]"
-      placeholder="e.g. Ramesh Kumar"
-      required
-    >
-  </div>
-
-  <div class="form-group">
-    <label>Phone Number</label>
-    <input
-      type="tel"
-      name="listing[owner][phone]"
-      placeholder="10-digit mobile number"
-      pattern="[0-9]{10}"
-      required
-    >
-  </div>
-
-  <p class="hint-text">
-    This number will be shown to users for Call & WhatsApp
-  </p>
-</div>
-
-
-<button type="submit" class="primary-btn">
-  Create PG Listing
-</button>
-
-
-
-
-
-  </form>
-</div>
-
-
-
-<style>
-    /* ================= CREATE PAGE ================= */
-
-.form-page {
-  padding: 12px;
-}
-
-/* Page title */
-.page-title {
-  margin: 0 0 12px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
-}
-
-/* Form wrapper */
-.pg-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Card */
-.form-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-/* Section title */
-.form-section-title {
-  margin: 0 0 10px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #111827;
-}
-
-/* Form group */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.form-group:last-child {
-  margin-bottom: 0;
-}
-
-/* Labels */
-.form-group label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #374151;
-}
-
-/* Inputs */
-.form-group input,
-.form-group textarea {
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  outline: none;
-  background: #ffffff;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: #ff5a7a;
-}
-
-/* Radio & checkbox row */
-.option-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.option-row label {
-  font-size: 13px;
-  color: #374151;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Submit button */
-.primary-btn {
-  margin-top: 8px;
-  padding: 12px;
-  border-radius: 14px;
-  border: none;
-  background: #ff5a7a;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* Image add button */
-.secondary-btn {
-  margin-top: 6px;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px dashed #ff5a7a;
-  background: #fff;
-  color: #ff5a7a;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Helper text */
-.hint-text {
-  margin-top: 6px;
-  font-size: 12px;
-  color: #6b7280;
-}
-
-
-/* Pricing */
-.mini-title {
-  margin: 6px 0 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.sharing-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.sharing-row select,
-.sharing-row input {
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-}
-
-.sharing-row select:focus,
-.sharing-row input:focus {
-  border-color: #ff5a7a;
-}
-/* remove botton */
-.sharing-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.remove-btn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  color: #ff5a7a;
-}
-
-
-/* TIME SELECT */
-.time-row {
-  display: flex;
-  gap: 8px;
-}
-
-.time-row select {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  font-size: 14px;
-}
-
-/* PILL RADIO BUTTONS */
-.pill-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.pill {
-  padding: 8px 14px;
-  border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  font-size: 13px;
-  cursor: pointer;
-  background: #fff;
-}
-
-.pill input {
-  display: none;
-}
-
-.pill:has(input:checked) {
-  background: #fff1f4;
-  border-color: #ff5a7a;
-  color: #ff5a7a;
-  font-weight: 600;
-}
-
-
-/* Amenities grid */
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.checkbox-grid label {
-  font-size: 13px;
-  color: #374151;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Custom amenities */
-.custom-amenities {
-  margin-top: 10px;
-}
-
-.mini-title {
-  margin: 6px 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.custom-amenity-row {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.custom-amenity-row input {
-  flex: 1;
-}
-.custom-amenity-row {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.remove-btn {
-  border: none;
-  background: #ffe4e6;
-  color: #e11d48;
-  padding: 0 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-
-
-.custom-rule-row {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.custom-rule-row input {
-  flex: 1;
-}
-
-.remove-btn {
-  border: none;
-  background: #ffe4e6;
-  color: #e11d48;
-  padding: 0 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-
-</style>
-
-
-
-    <script>
-  const addImageBtn = document.getElementById("addImageBtn");
-  const imageInputs = document.getElementById("imageInputs");
-
-  let imageCount = 1;
-  const MAX_IMAGES = 10;
-
-  addImageBtn.addEventListener("click", () => {
-    if (imageCount >= MAX_IMAGES) {
-      alert("You can add maximum 10 images");
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "form-group";
-    div.innerHTML = `
-      <input 
-        type="url" 
-        name="images[]" 
-        placeholder="Paste image URL"
-      >
-    `;
-
-    imageInputs.appendChild(div);
-    imageCount++;
-  });
-
-
-
-
-  //for pricing 
-  const addSharingBtn = document.getElementById("addSharingBtn");
-const sharingContainer = document.getElementById("sharingContainer");
-
-let sharingCount = 1;
-const MAX_SHARING = 5;
-
-addSharingBtn.addEventListener("click", () => {
-  if (sharingCount >= MAX_SHARING) {
-    alert("Maximum 5 sharing options allowed");
-    return;
-  }
-
-  const row = document.createElement("div");
-  row.className = "sharing-row";
-
-  row.innerHTML = `
-    <select name="pricing[sharing][${sharingCount}][type]" required>
-      <option value="">Select sharing</option>
-      <option>Single</option>
-      <option>Double</option>
-      <option>Triple</option>
-      <option>Four</option>
-      <option>Five</option>
-    </select>
-
-    <input
-      type="number"
-      name="pricing[sharing][${sharingCount}][price]"
-      placeholder="Price"
-      required
-    >
-
-    <button type="button" class="remove-btn">❌</button>
-  `;
-
-  // REMOVE BUTTON
-  row.querySelector(".remove-btn").addEventListener("click", () => {
-    row.remove();
-    sharingCount--;
-  });
-
-  sharingContainer.appendChild(row);
-  sharingCount++;
-});
-</script>
-
-<!-- amenities -->
- <script>
-  const addAmenityBtn = document.getElementById("addAmenityBtn");
-  const customAmenities = document.getElementById("customAmenities");
-
-  let customAmenityCount = 0;
-  const MAX_CUSTOM_AMENITIES = 3;
-
-  addAmenityBtn.addEventListener("click", () => {
-    if (customAmenityCount >= MAX_CUSTOM_AMENITIES) {
-      alert("You can add only 3 custom amenities");
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "custom-amenity-row";
-
-    div.innerHTML = `
-      <input 
-        type="text" 
-        name="amenities[]" 
-        placeholder="e.g. Gym, Lift, RO Water"
-      >
-      <button type="button" class="remove-btn">✕</button>
-    `;
-
-    // REMOVE BUTTON LOGIC
-    div.querySelector(".remove-btn").addEventListener("click", () => {
-      div.remove();
-      customAmenityCount--;
-    });
-
-    customAmenities.appendChild(div);
-    customAmenityCount++;
-  });
-</script>
-
-
-<!-- for rules -->
-<script>
-  const addRuleBtn = document.getElementById("addRuleBtn");
-  const customRules = document.getElementById("customRules");
-
-  let ruleCount = 0;
-  const MAX_RULES = 3;
-
-  addRuleBtn.addEventListener("click", () => {
-    if (ruleCount >= MAX_RULES) {
-      alert("You can add only 3 custom rules");
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "custom-rule-row";
-
-    div.innerHTML = `
-      <input
-        type="text"
-        name="rules[]"
-        placeholder="e.g. Silence after 10 PM"
-      >
-      <button type="button" class="remove-btn">✕</button>
-    `;
-
-    div.querySelector(".remove-btn").addEventListener("click", () => {
-      div.remove();
-      ruleCount--;
-    });
-
-    customRules.appendChild(div);
-    ruleCount++;
-  });
-</script>
