@@ -50,24 +50,29 @@ app.get("/listing/:id",async(req,res)=>{
  
 })
 
-
-//create route
-app.post("/listing",async(req,res)=>{
-    let listing = req.body.listing;    //getting listing data from req.body
-    const newListing = new Listing(listing);
-    //  console.log(listing);
-    //  console.log(newListing);
- const { gateHour, gateMinute, gatePeriod } = req.body.listing.overview || {};
-if (gateHour && gateMinute && gatePeriod) {
-  listing.overview.gateTime = `${gateHour}:${gateMinute} ${gatePeriod}`;
-} else {
-  listing.overview.gateTime = "Not mentioned";
-}
-     await newListing.save();
-     res.redirect("/listing");
+app.post("/listing", async (req, res) => {
+  let listing = req.body.listing;
 
 
-})
+  const { gateHour, gateMinute, gatePeriod } = listing.overview || {};// Extract the individual time components from the overview object
+
+  if (gateHour && gateMinute && gatePeriod) {
+    listing.overview.gateTime = `${gateHour}:${gateMinute} ${gatePeriod}`;
+  } else {
+    listing.overview.gateTime = "Not mentioned";
+  }
+
+  delete listing.overview.gateHour; // Remove the individual time components from the overview object
+  delete listing.overview.gateMinute;
+  delete listing.overview.gatePeriod;
+
+
+  const newListing = new Listing(listing); // Create a new instance of the Listing model with the form data
+  await newListing.save();//
+
+  res.redirect("/listing");
+});
+
 
 
 
