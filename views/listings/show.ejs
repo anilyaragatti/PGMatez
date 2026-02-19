@@ -1,558 +1,197 @@
 <% layout('layout/boilerplate') -%>
- 
-<div class="pg-info">
 
-  <div class="pg-card">
+  <div class="pg-info">
 
-    
-    <div class="pg-slider">
-  <div class="pg-slides">
-    <% if (listing.images && listing.images.length > 0) { %>
-      <% listing.images.forEach(img => { %>
-        <img src="<%= img %>" alt="PG Image">
-      <% }) %>
-    <% } else { %>
-      <img src="/images/placeholder.jpg" alt="No Image">
-    <% } %>
-  </div>
-
-  <% if (listing.images && listing.images.length > 1) { %>
-    <div class="pg-dots">
-      <% listing.images.forEach((_, i) => { %>
-        <span class="dot <%= i === 0 ? 'active' : '' %>"></span>
-      <% }) %>
-    </div>
-  <% } %>
-</div>
-
-
-
-     <div class="pg-card-body">
-      <h2 class="pg-title"><%= listing.title %></h2>
-      <p class="pg-owner">
-  <i class="fa-solid fa-user"></i>
-  Owned by: <strong><%= listing.owner.name %></strong>
-</p>
-
-      <p class="pg-desc"><%= listing.description %></p>
-
-      <div class="pg-location">
-        <span class="area"><%= listing.location.area %></span>
-        <span class="landmark"><%= listing.location.landmark %></span>
-      </div>
-      <span class="pg-gender"><%= listing.gender %> PG</span>
-    </div>
-
-  </div>
-
-
-
-<!-- PRICING CARD -->
-<div class="pg-price-card">
-
-  <h3 class="section-title">Pricing</h3>
-
-  <div class="price-main">
-    <div>
-      <span class="label">Monthly Rent</span>
-      <span class="value">₹ <%= listing.pricing.rent.toLocaleString("en-IN") %></span>
-    </div>
-
-    <div>
-      <span class="label">Deposit</span>
-      <span class="value">₹ <%= listing.pricing.deposit.toLocaleString("en-IN") %></span>
-    </div>
-  </div>
-
-  <div class="sharing-section">
-    <h4 class="sub-title">Sharing Options</h4>
-
-    <% listing.pricing.sharing.forEach(s => { %>
-      <div class="sharing-row">
-        <span class="sharing-type"><%= s.type %> Sharing</span>
-        <span class="sharing-price">₹ <%= s.price.toLocaleString("en-IN") %></span>
-      </div>
-    <% }) %>
-  </div>
-
-</div>
-
-
-<!-- OVERVIEW CARD -->
-<div class="pg-overview-card">
-
-  <h3 class="section-title">Overview</h3>
-
-  <div class="overview-row">
-    <span class="overview-label">Food</span>
-    <span class="overview-value"><%= listing.overview.food %></span>
-  </div>
-
-  <div class="overview-row">
-    <span class="overview-label">Gate Time</span>
-    <span class="overview-value"><%= listing.overview.gateTime %></span>
-  </div>
-<div class="overview-row">
-  <span class="overview-label">Preferred For</span>
-  <span class="overview-value">
-    <%= listing.preferredFor && listing.preferredFor.length > 0 
-        ? listing.preferredFor.join(", ") 
-        : "Anyone" %>
-  </span>
-</div>
-
-</div>
-
-
-<!-- AMENITIES -->
-<div class="pg-amenities-card">
-
-  <h3 class="section-title">Amenities</h3>
-
-  <% if (listing.amenities && listing.amenities.length > 0) { %>
-    <div class="amenities-grid">
-      <% listing.amenities.forEach(item => { %>
-        <div class="amenity-item">
-          <i class="fa-solid fa-check"></i>
-          <span><%= item %></span>
+    <!-- HERO CARD & GALLERY -->
+    <div class="pg-card">
+      <div class="pg-slider">
+        <div class="pg-slides">
+          <% if (listing.images && listing.images.length> 0) { %>
+            <% listing.images.forEach(img=> { %>
+              <img src="<%= img %>" alt="PG Image">
+              <% }) %>
+                <% } else { %>
+                  <img src="/images/placeholder.jpg" alt="No Image">
+                  <% } %>
         </div>
-      <% }) %>
+
+        <% if (listing.images && listing.images.length> 1) { %>
+          <div class="pg-dots">
+            <% listing.images.forEach((_, i)=> { %>
+              <span class="dot <%= i === 0 ? 'active' : '' %>"></span>
+              <% }) %>
+          </div>
+          <% } %>
+      </div>
+
+      <div class="pg-card-body">
+        <h2 class="pg-title">
+          <%= listing.title %>
+        </h2>
+        <p class="pg-owner">
+          <i class="fa-solid fa-user-circle"></i>
+          Owned by: <strong>
+            <%= listing.owner.name %>
+          </strong>
+        </p>
+
+        <p class="pg-desc">
+          <%= listing.description %>
+        </p>
+
+        <div class="pg-location">
+          <span class="area"><i class="fa-solid fa-location-dot"></i>
+            <%= listing.location.area %>
+          </span>
+          <span class="landmark">
+            <%= listing.location.landmark %>
+          </span>
+        </div>
+        <span class="pg-gender"><i class="fa-solid fa-restroom"></i>
+          <%= listing.gender %> PG
+        </span>
+      </div>
     </div>
-  <% } else { %>
-    <p class="empty-text">No amenities information available</p>
-  <% } %>
-
-</div>
-
-<!-- PG RULES -->
-<div class="pg-rules-card">
-
-  <h3 class="section-title">PG Rules</h3>
-
-  <% if (listing.rules && listing.rules.length > 0) { %>
-    <ul class="rules-list">
-      <% listing.rules.forEach(rule => { %>
-        <li>
-          <i class="fa-solid fa-circle-check"></i>
-          <span><%= rule %></span>
-        </li>
-      <% }) %>
-    </ul>
-  <% } else { %>
-    <p class="empty-text">No rules mentioned by the owner</p>
-  <% } %>
-
-</div>
 
 
- 
+    <!-- PRICING CARD -->
+    <div class="pg-section-card">
+      <h3 class="section-title">Pricing</h3>
 
-<!-- OWNER CONTACT -->
-<div class="pg-contact-card">
+      <div class="price-grid">
+        <div class="price-item">
+          <span class="label">Monthly Rent</span>
+          <span class="value">₹ <%= listing.pricing.rent.toLocaleString("en-IN") %></span>
+        </div>
+        <div class="price-item">
+          <span class="label">Deposit</span>
+          <span class="value">₹ <%= listing.pricing.deposit.toLocaleString("en-IN") %></span>
+        </div>
+      </div>
 
-  <h3 class="section-title">Contact Owner</h3>
-
-  <div class="owner-info">
-    <i class="fa-solid fa-user"></i>
-    <div>
-      <p class="owner-name"><%= listing.owner.name %></p>
-      <p class="owner-phone"><%= listing.owner.phone %></p>
+      <div class="sharing-list">
+        <h4 class="detail-label" style="font-weight: 600; margin: 0 0 8px;">Sharing Options</h4>
+        <% listing.pricing.sharing.forEach(s=> { %>
+          <div class="detail-row">
+            <span class="sharing-type">
+              <%= s.type %> Sharing
+            </span>
+            <span class="sharing-price">₹ <%= s.price.toLocaleString("en-IN") %></span>
+          </div>
+          <% }) %>
+      </div>
     </div>
+
+
+    <!-- OVERVIEW CARD -->
+    <div class="pg-section-card">
+      <h3 class="section-title">Overview</h3>
+      <div class="overview-list">
+        <div class="detail-row">
+          <span class="detail-label">Food</span>
+          <span class="detail-value">
+            <%= listing.overview.food %>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Gate Time</span>
+          <span class="detail-value">
+            <%= listing.overview.gateTime %>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Preferred For</span>
+          <span class="detail-value">
+            <%= listing.preferredFor && listing.preferredFor.length> 0
+              ? listing.preferredFor.join(", ")
+              : "Anyone" %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- AMENITIES -->
+    <div class="pg-section-card">
+      <h3 class="section-title">Amenities</h3>
+      <% if (listing.amenities && listing.amenities.length> 0) { %>
+        <div class="amenities-grid">
+          <% listing.amenities.forEach(item=> { %>
+            <div class="amenity-item">
+              <i class="fa-solid fa-check-circle"></i>
+              <span>
+                <%= item %>
+              </span>
+            </div>
+            <% }) %>
+        </div>
+        <% } else { %>
+          <p class="detail-label">No amenities information available</p>
+          <% } %>
+    </div>
+
+
+    <!-- PG RULES -->
+    <div class="pg-section-card">
+      <h3 class="section-title">PG Rules</h3>
+      <% if (listing.rules && listing.rules.length> 0) { %>
+        <div class="rules-list">
+          <% listing.rules.forEach(rule=> { %>
+            <div class="rule-item">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span class="rule-text">
+                <%= rule %>
+              </span>
+            </div>
+            <% }) %>
+        </div>
+        <% } else { %>
+          <p class="detail-label">No specific rules mentioned</p>
+          <% } %>
+    </div>
+
+
+    <!-- OWNER CONTACT -->
+    <div class="pg-section-card">
+      <h3 class="section-title">Contact Owner</h3>
+
+      <div class="owner-card">
+        <div class="owner-avatar">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="owner-details">
+          <h4>
+            <%= listing.owner.name %>
+          </h4>
+          <p>
+            <%= listing.owner.phone %>
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-actions">
+        <a href="tel:<%= listing.owner.phone %>" class="btn call-btn">
+          <i class="fa-solid fa-phone"></i> Call
+        </a>
+        <a href="https://wa.me/91<%= listing.owner.phone %>" target="_blank" class="btn whatsapp-btn">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+
   </div>
 
 
-
-
-  <div class="contact-actions">
-    <a href="tel:<%= listing.owner.phone %>" class="btn call-btn">
-      <i class="fa-solid fa-phone"></i>
-      Call
-    </a>
-
-    <a 
-      href="https://wa.me/91<%= listing.owner.phone %>" 
-      target="_blank"
-      class="btn whatsapp-btn"
-    >
-      <i class="fa-brands fa-whatsapp"></i>
-      WhatsApp
-    </a>
-  </div>
-
-</div>
-
-
-
-</div>
-
-
- <style>
-
- .pg-info {
-  padding: 12px;
-}
-
- .pg-card {
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
- .pg-slider {
-  position: relative;
-  overflow: hidden;
-}
-
-.pg-slides {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.pg-slides::-webkit-scrollbar {
-  display: none;
-}
-
-.pg-slides img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  flex-shrink: 0;
-  scroll-snap-align: start;
-}
-
- .pg-dots {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-}
-
-.dot {
-  width: 6px;
-  height: 6px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 50%;
-}
-
-.dot.active {
-  background: #ff5a7a;
-}
-
- .pg-card-body {
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
- .pg-title {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 700;
-  color: #111827;
-}
-
- .pg-owner {
-  margin: 0;
-  font-size: 13px;
-  color: #6b7280;
-}
-
- .pg-desc {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #4b5563;
-  line-height: 1.4;
-}
-
- .pg-location {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.pg-location .area {
-  font-weight: 600;
-  color: #111827;
-}
-
- .pg-gender {
-  align-self: flex-start;
-  margin-top: 6px;
-  padding: 3px 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #ff5a7a;
-  background: #fff1f4;
-  border-radius: 12px;
-} 
-.pg-owner i {
-  margin-right: 4px;
-  color: #6b7280;
-  font-size: 12px;
-}
-
-
-/* PRICING CARD */
-.pg-price-card {
-  margin-top: 12px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-/* Section title */
-.section-title {
-  margin: 0 0 8px 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: #111827;
-}
-
-/* Rent + Deposit */
-.price-main {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.price-main .label {
-  display: block;
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.price-main .value {
-  font-size: 16px;
-  font-weight: 700;
-  color: #ff5a7a;
-}
-
-/* Sharing section */
-.sub-title {
-  margin: 8px 0 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.sharing-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px dashed #e5e7eb;
-}
-
-.sharing-row:last-child {
-  border-bottom: none;
-}
-
-.sharing-type {
-  font-size: 13px;
-  color: #374151;
-}
-
-.sharing-price {
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-}
-
-/* OVERVIEW CARD */
-.pg-overview-card {
-  margin-top: 12px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-.overview-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.overview-row:last-child {
-  border-bottom: none;
-}
-
-.overview-label {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.overview-value {
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-}
-
-
-/* AMENITIES CARD */
-.pg-amenities-card {
-  margin-top: 12px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-/* GRID */
-.amenities-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-/* ITEM */
-.amenity-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #374151;
-}
-
-.amenity-item i {
-  color: #ff5a7a;
-  font-size: 12px;
-}
- 
-
-
-/* RULES CARD */
-.pg-rules-card {
-  margin-top: 12px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-/* RULES LIST */
-.rules-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.rules-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 13px;
-  color: #374151;
-  line-height: 1.4;
-}
-
-.rules-list i {
-  color: #ff5a7a;
-  font-size: 12px;
-  margin-top: 3px;
-}
-
-/* EMPTY STATE */
-.empty-text {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-/* CONTACT CARD */
-.pg-contact-card {
-  margin-top: 12px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-/* OWNER INFO */
-.owner-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.owner-info i {
-  font-size: 20px;
-  color: #ff5a7a;
-}
-
-.owner-name {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.owner-phone {
-  margin: 0;
-  font-size: 13px;
-  color: #6b7280;
-}
-
-/* BUTTONS */
-.contact-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.btn {
-  flex: 1;
-  text-align: center;
-  padding: 10px 0;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.call-btn {
-  background: #f3f4f6;
-  color: #111827;
-}
-
-.whatsapp-btn {
-  background: #25d366;
-  color: #ffffff;
-}
-
-
-
-</style> 
-
-
-<script>
-  const slider = document.querySelector(".pg-slides");
-  const dots = document.querySelectorAll(".dot");
-
-  if (slider) {
-    slider.addEventListener("scroll", () => {
-      const index = Math.round(
-        slider.scrollLeft / slider.clientWidth
-      );
-
-      dots.forEach((dot, i) => {
-        dot.classList.toggle("active", i === index);
+  <script>
+    const slider = document.querySelector(".pg-slides");
+    const dots = document.querySelectorAll(".dot");
+
+    if (slider) {
+      slider.addEventListener("scroll", () => {
+        const index = Math.round(slider.scrollLeft / slider.clientWidth);
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
+        });
       });
-    });
-  }
-</script>
+    }
+  </script>

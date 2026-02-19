@@ -1,26 +1,23 @@
 <% layout('layout/boilerplate') -%>
-        <div class="listings">
+    <div class="listings">
 
-    <% for(let listing of allListing){ %>
-        <a href="/listing/<%=listing._id %>" style="text-decoration: none;"> 
-
-            <div class="card">
-                <div class=" card-image">
-                    <img src="<%=listing.images[2]%>">
+        <% for(let listing of allListing){ %>
+            <a href="/listing/<%=listing._id %>" class="card">
+                <div class="card-image">
+                    <img src="<%= listing.images && listing.images.length > 0 ? listing.images[0] : '/images/default-listing.jpg' %>"
+                        alt="<%= listing.title %>">
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title"><b><%=listing.title%></b></h4>
+                    <h4 class="card-title">
+                        <%=listing.title%>
+                    </h4>
                     <div class="card-info">
-                    <%=listing.location.area %><br>
-                     From &#8377 <%=listing.pricing.rent.toLocaleString("en-IN") %>/Month
+                        <%=listing.location.area %>
+                    </div>
+                    <div class="price-tag">
+                        &#8377; <%=listing.pricing.rent.toLocaleString("en-IN") %>/Month
                     </div>
                 </div>
-            </div>
             </a>
-        <%}%>
-                </div>
-
- 
-
-
-  
+            <%}%>
+    </div>

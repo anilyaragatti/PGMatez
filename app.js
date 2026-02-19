@@ -38,8 +38,15 @@ app.get("/listing", async(req,res)=>{
 //new route
 app.get("/listing/new",(req,res)=>{
     res.render("listings/new")
-}
-);
+});
+
+app.get("/saved", (req, res) => {
+  res.render("listings/saved");
+});
+
+app.get("/profile", (req, res) => {
+  res.render("listings/profile");
+});
 
 
 // show route

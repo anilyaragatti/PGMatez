@@ -30,20 +30,6 @@
             <label><input type="radio" name="listing[gender]" value="Any"> Any</label>
           </div>
         </div>
-
-        <div class="form-group">
-          <label>Preferred For</label>
-          <div class="option-row">
-            <label>
-              <input type="checkbox" name="listing[preferredFor][]" value="Students">
-              Students
-            </label>
-            <label>
-              <input type="checkbox" name="listing[preferredFor][]" value="Working Professionals">
-              Working Professionals
-            </label>
-          </div>
-        </div>
       </div>
 
       <!-- LOCATION -->
@@ -73,7 +59,8 @@
 
         <div id="imageInputs">
           <div class="form-group image-row">
-            <input type="file" name="listing[images][]" placeholder="Paste image URL">
+            <input type="url" name="listing[images][]" placeholder="Paste image URL (https://...)" pattern="https?://.+"
+              title="Include http://" required>
           </div>
         </div>
 
@@ -197,54 +184,38 @@
       </div>
 
       <!-- AMENITIES -->
-      <!-- AMENITIES -->
       <div class="form-card">
         <h3 class="form-section-title">Amenities</h3>
 
         <!-- PREDEFINED AMENITIES -->
         <div class="checkbox-grid">
           <label>
-            <input type="checkbox" name="listing[amenities][]" value="WiFi">
-            WiFi
+            <input type="checkbox" name="listing[amenities][]" value="WiFi"> WiFi
           </label>
-
           <label>
-            <input type="checkbox" name="listing[amenities][]" value="Food">
-            Food
+            <input type="checkbox" name="listing[amenities][]" value="Food"> Food
           </label>
-
           <label>
-            <input type="checkbox" name="listing[amenities][]" value="Power Backup">
-            Power Backup
+            <input type="checkbox" name="listing[amenities][]" value="Power Backup"> Power Backup
           </label>
-
           <label>
-            <input type="checkbox" name="listing[amenities][]" value="Parking">
-            Parking
+            <input type="checkbox" name="listing[amenities][]" value="Parking"> Parking
           </label>
-
           <label>
-            <input type="checkbox" name="listing[amenities][]" value="Washing Machine">
-            Washing Machine
+            <input type="checkbox" name="listing[amenities][]" value="Washing Machine"> Washing Machine
           </label>
-
           <label>
-            <input type="checkbox" name="listing[amenities][]" value="CCTV">
-            CCTV
+            <input type="checkbox" name="listing[amenities][]" value="CCTV"> CCTV
           </label>
         </div>
 
         <!-- CUSTOM AMENITIES -->
         <div class="custom-amenities">
           <h4 class="mini-title">Add Custom Amenities</h4>
-
           <div id="customAmenities"></div>
-
           <button type="button" class="secondary-btn" id="addAmenityBtn">
             + Add Custom Amenity
           </button>
-
-          <p class="hint-text">You can add up to 3 custom amenities</p>
         </div>
       </div>
 
@@ -255,38 +226,25 @@
         <!-- PREDEFINED RULES -->
         <div class="option-row">
           <label>
-            <input type="checkbox" name="listing[rules][]" value="No Smoking">
-            No Smoking
+            <input type="checkbox" name="listing[rules][]" value="No Smoking"> No Smoking
           </label>
-
           <label>
-            <input type="checkbox" name="listing[rules][]" value="No Alcohol">
-            No Alcohol
+            <input type="checkbox" name="listing[rules][]" value="No Alcohol"> No Alcohol
           </label>
-
           <label>
-            <input type="checkbox" name="listing[rules][]" value="No Outside Food">
-            No Outside Food
+            <input type="checkbox" name="listing[rules][]" value="No Outside Food"> No Outside Food
           </label>
-
           <label>
-            <input type="checkbox" name="listing[rules][]" value="Visitors Allowed">
-            Visitors Allowed
+            <input type="checkbox" name="listing[rules][]" value="Visitors Allowed"> Visitors Allowed
           </label>
         </div>
 
         <!-- CUSTOM RULES -->
         <div id="customRules"></div>
-
         <button type="button" class="secondary-btn" id="addRuleBtn">
           + Add Custom Rule
         </button>
-
-        <p class="hint-text">You can add up to 3 custom rules</p>
       </div>
-
-
-
 
 
       <!-- OWNER CONTACT -->
@@ -310,18 +268,7 @@
       </div>
 
 
-      <button type="submit" class="primary-btn">
-        Create PG Listing
-      </button>
+      <button type="submit" class="primary-btn">Create PG Listing</button>
 
     </form>
   </div>
-
-
-
-
-
-
-
-  
-
