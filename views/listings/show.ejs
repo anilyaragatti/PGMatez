@@ -1,5 +1,17 @@
 <% layout('layout/boilerplate') -%>
 
+  <div>
+    <a href="/listing/<%= listing._id %>/edit">
+      <h3>edit</h3>
+    </a>
+  </div>
+
+  <div>
+    <form method="POST" action="/listing/<%= listing._id %>?_method=DELETE">
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+
   <div class="pg-info">
 
     <!-- HERO CARD & GALLERY -->

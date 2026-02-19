@@ -21,42 +21,72 @@ app.use(express.urlencoded({ extended: true }));
 
 
 main().then((res) => {
-    console.log("connecting to mongose")
+  console.log("connecting to mongose")
 })
-    .catch(err => console.log("error connecting to mongoose" + err));
+  .catch(err => console.log("error connecting to mongoose" + err));
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/PGMate');
+  await mongoose.connect('mongodb://127.0.0.1:27017/PGMate');
 }
 
 //index route
-app.get("/listing", async(req,res)=>{
-    const allListing = await Listing.find({});
-    res.render("listings/index", { allListing });
+app.get("/listing", async (req, res) => {
+  const allListing = await Listing.find({});
+  res.render("listings/index", { allListing });
 });
 
 //new route
-app.get("/listing/new",(req,res)=>{
-    res.render("listings/new")
+app.get("/listing/new", (req, res) => {
+  res.render("listings/new")
 });
 
+//saved route
 app.get("/saved", (req, res) => {
   res.render("listings/saved");
 });
 
+//profile route
 app.get("/profile", (req, res) => {
   res.render("listings/profile");
 });
 
 
 // show route
-app.get("/listing/:id",async(req,res)=>{
-    const {id} = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/show" ,{listing})
- 
-})
+app.get("/listing/:id", async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  res.render("listings/show", { listing })
 
+});
+
+//edit route
+app.get("/listing/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  res.render("listings/edit", { listing })
+});
+
+// Update route
+app.put("/listing/:id", async (req, res) => {
+  const { id } = req.params;
+  let listing = req.body.listing;
+
+  // Combine gate time fields into a single string
+  const { gateHour, gateMinute, gatePeriod } = listing.overview || {};
+  if (gateHour && gateMinute && gatePeriod) {
+    listing.overview.gateTime = `${gateHour}:${gateMinute} ${gatePeriod}`;
+  } else {
+    listing.overview.gateTime = "Not mentioned";
+  }
+  delete listing.overview.gateHour;
+  delete listing.overview.gateMinute;
+  delete listing.overview.gatePeriod;
+
+  await Listing.findByIdAndUpdate(id, listing);
+  res.redirect(`/listing/${id}`);
+});
+
+//create route
 app.post("/listing", async (req, res) => {
   let listing = req.body.listing;
 
@@ -80,15 +110,19 @@ app.post("/listing", async (req, res) => {
   res.redirect("/listing");
 });
 
+app.delete("/listing/:id", async (req, res) => {
+  const { id } = req.params;
+  await Listing.findByIdAndDelete(id);
+  res.redirect("/listing");
+});
 
 
 
- 
 app.get("/", async (req, res) => {
- res.send("ANIL YARAGATTI")     
+  res.send("ANIL YARAGATTI")
 });
 
 let port = 1009;
 app.listen(port, (req, res) => {
-    console.log(`Server is running on port ${port}`)
+  console.log(`Server is running on port ${port}`)
 })

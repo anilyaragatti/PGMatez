@@ -1,0 +1,536 @@
+<% layout('layout/boilerplate') -%>
+
+    <% // Parse gateTime back into components for pre-filling let gateHour='' ; let gateMinute='' ; let gatePeriod='' ;
+        if (listing.overview && listing.overview.gateTime && listing.overview.gateTime !=='Not mentioned' ) { const
+        parts=listing.overview.gateTime.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i); if (parts) { gateHour=parts[1];
+        gateMinute=parts[2]; gatePeriod=parts[3].toUpperCase(); } } // Determine predefined vs custom amenities const
+        predefinedAmenities=['WiFi', 'Food' , 'Power Backup' , 'Parking' , 'Washing Machine' , 'CCTV' ]; const
+        customAmenities=(listing.amenities || []).filter(a=> !predefinedAmenities.includes(a));
+
+        // Determine predefined vs custom rules
+        const predefinedRules = ['No Smoking', 'No Alcohol', 'No Outside Food', 'Visitors Allowed'];
+        const customRules = (listing.rules || []).filter(r => !predefinedRules.includes(r));
+
+        // Get PreferredFor value
+        const preferredFor = listing.overview && listing.overview.PreferredFor ? listing.overview.PreferredFor : '';
+        %>
+
+        <div class="form-page">
+
+            <!-- PAGE TITLE -->
+            <h2 class="page-title">Edit PG</h2>
+
+            <form action="/listing/<%= listing._id %>?_method=PUT" method="POST" class="pg-form">
+
+                <!-- BASIC DETAILS -->
+                <div class="form-card">
+                    <h3 class="form-section-title">Basic Details</h3>
+
+                    <div class="form-group">
+                        <label>PG Title </label>
+                        <input type="text" name="listing[title]" placeholder="e.g. Sunrise Boys PG"
+                            value="<%= listing.title %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description </label>
+                        <textarea name="listing[description]" rows="3" placeholder="Short description about the PG"
+                            required><%= listing.description %></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender </label>
+                        <div class="option-row">
+                            <label><input type="radio" name="listing[gender]" value="Male" <%=listing.gender==='Male'
+                                    ? 'checked' : '' %> required> Male</label>
+                            <label><input type="radio" name="listing[gender]" value="Female"
+                                    <%=listing.gender==='Female' ? 'checked' : '' %>> Female</label>
+                            <label><input type="radio" name="listing[gender]" value="Any" <%=listing.gender==='Any'
+                                    ? 'checked' : '' %>> Any</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOCATION -->
+                <div class="form-card">
+                    <h3 class="form-section-title">Location</h3>
+
+                    <div class="form-group">
+                        <label>City </label>
+                        <input type="text" name="listing[location][city]" placeholder="City name"
+                            value="<%= listing.location.city %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Area </label>
+                        <input type="text" name="listing[location][area]" placeholder="Area / Locality"
+                            value="<%= listing.location.area %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Landmark</label>
+                        <input type="text" name="listing[location][landmark]" placeholder="Nearby landmark"
+                            value="<%= listing.location.landmark || '' %>">
+                    </div>
+                </div>
+
+
+                <!-- IMAGES -->
+                <div class="form-card">
+                    <h3 class="form-section-title">PG Images</h3>
+
+                    <div id="imageInputs">
+                        <% if (listing.images && listing.images.length> 0) { %>
+                            <% listing.images.forEach((img, i)=> { %>
+                                <div class="form-group image-row">
+                                    <input type="url" name="listing[images][]"
+                                        placeholder="Paste image URL (https://...)" pattern="https?://.+"
+                                        title="Include http://" value="<%= img %>" required>
+                                    <% if (i> 0) { %>
+                                        <button type="button" class="remove-btn">✕</button>
+                                        <% } %>
+                                </div>
+                                <% }) %>
+                                    <% } else { %>
+                                        <div class="form-group image-row">
+                                            <input type="url" name="listing[images][]"
+                                                placeholder="Paste image URL (https://...)" pattern="https?://.+"
+                                                title="Include http://" required>
+                                        </div>
+                                        <% } %>
+                    </div>
+
+                    <button type="button" class="secondary-btn" id="addImageBtn">
+                        + Add another image
+                    </button>
+
+                    <p class="hint-text">
+                        You can add up to 10 images
+                    </p>
+                </div>
+
+
+                <!-- PRICING -->
+                <div class="form-card">
+                    <h3 class="form-section-title">Pricing</h3>
+
+                    <!-- RENT -->
+                    <div class="form-group">
+                        <label>Monthly Rent (₹)</label>
+                        <input type="number" name="listing[pricing][rent]" placeholder="e.g. 8500"
+                            value="<%= listing.pricing.rent %>" required>
+                    </div>
+
+                    <!-- DEPOSIT -->
+                    <div class="form-group">
+                        <label>Deposit (₹)</label>
+                        <input type="number" name="listing[pricing][deposit]" placeholder="e.g. 15000"
+                            value="<%= listing.pricing.deposit || '' %>">
+                    </div>
+
+                    <!-- SHARING OPTIONS -->
+                    <h4 class="mini-title">Sharing Options</h4>
+
+                    <div id="sharingContainer">
+                        <% if (listing.pricing.sharing && listing.pricing.sharing.length> 0) { %>
+                            <% listing.pricing.sharing.forEach((s, i)=> { %>
+                                <div class="sharing-row">
+                                    <select name="listing[pricing][sharing][<%= i %>][type]" required>
+                                        <option value="">Select sharing</option>
+                                        <option <%=s.type==='Single' ? 'selected' : '' %>>Single</option>
+                                        <option <%=s.type==='Double' ? 'selected' : '' %>>Double</option>
+                                        <option <%=s.type==='Triple' ? 'selected' : '' %>>Triple</option>
+                                        <option <%=s.type==='Four' ? 'selected' : '' %>>Four</option>
+                                        <option <%=s.type==='Five' ? 'selected' : '' %>>Five</option>
+                                    </select>
+
+                                    <input type="number" name="listing[pricing][sharing][<%= i %>][price]"
+                                        placeholder="Price" value="<%= s.price %>" required>
+
+                                    <% if (i> 0) { %>
+                                        <button type="button" class="remove-btn">✕</button>
+                                        <% } %>
+                                </div>
+                                <% }) %>
+                                    <% } else { %>
+                                        <div class="sharing-row">
+                                            <select name="listing[pricing][sharing][0][type]" required>
+                                                <option value="">Select sharing</option>
+                                                <option>Single</option>
+                                                <option>Double</option>
+                                                <option>Triple</option>
+                                                <option>Four</option>
+                                                <option>Five</option>
+                                            </select>
+                                            <input type="number" name="listing[pricing][sharing][0][price]"
+                                                placeholder="Price" required>
+                                        </div>
+                                        <% } %>
+                    </div>
+
+                    <button type="button" class="secondary-btn" id="addSharingBtn">
+                        + Add Sharing Option
+                    </button>
+
+                    <p class="hint-text">Maximum 5 sharing options allowed</p>
+                </div>
+
+
+
+                <!-- OVERVIEW -->
+                <div class="form-card">
+                    <h3 class="form-section-title">Overview</h3>
+
+                    <!-- FOOD -->
+                    <div class="form-group">
+                        <label>Food Available</label>
+                        <div class="option-row">
+                            <label><input type="checkbox" name="listing[overview][food][]" value="Breakfast"
+                                    <%=(listing.overview && listing.overview.food &&
+                                    listing.overview.food.includes('Breakfast')) ? 'checked' : '' %>>
+                                Breakfast</label>
+                            <label><input type="checkbox" name="listing[overview][food][]" value="Lunch"
+                                    <%=(listing.overview && listing.overview.food &&
+                                    listing.overview.food.includes('Lunch')) ? 'checked' : '' %>>
+                                Lunch</label>
+                            <label><input type="checkbox" name="listing[overview][food][]" value="Dinner"
+                                    <%=(listing.overview && listing.overview.food &&
+                                    listing.overview.food.includes('Dinner')) ? 'checked' : '' %>>
+                                Dinner</label>
+                        </div>
+                    </div>
+
+                    <!-- GATE TIME (12H FORMAT) -->
+                    <div class="form-group">
+                        <label>Gate Closing Time</label>
+
+                        <div class="time-row">
+                            <select name="listing[overview][gateHour]" required>
+                                <option value="">HH</option>
+                                <% for(let i=1; i<=12; i++) { %>
+                                    <option value="<%= i %>" <%=gateHour==i ? 'selected' : '' %>><%= i %>
+                                    </option>
+                                    <% } %>
+                            </select>
+
+                            <select name="listing[overview][gateMinute]" required>
+                                <option value="">MM</option>
+                                <option <%=gateMinute==='00' ? 'selected' : '' %>>00</option>
+                                <option <%=gateMinute==='15' ? 'selected' : '' %>>15</option>
+                                <option <%=gateMinute==='30' ? 'selected' : '' %>>30</option>
+                                <option <%=gateMinute==='45' ? 'selected' : '' %>>45</option>
+                            </select>
+
+                            <select name="listing[overview][gatePeriod]" required>
+                                <option value="">AM/PM</option>
+                                <option <%=gatePeriod==='AM' ? 'selected' : '' %>>AM</option>
+                                <option <%=gatePeriod==='PM' ? 'selected' : '' %>>PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- PREFERRED FOR -->
+                    <div class="form-group">
+                        <label>Preferred For</label>
+                        <div class="pill-row">
+                            <label class="pill">
+                                <input type="radio" name="listing[preferredFor]" value="Students"
+                                    <%=preferredFor==='Students' ? 'checked' : '' %> required>
+                                Students
+                            </label>
+
+                            <label class="pill">
+                                <input type="radio" name="listing[preferredFor]" value="Working Professionals"
+                                    <%=preferredFor==='Working Professionals' ? 'checked' : '' %>>
+                                Working Professionals
+                            </label>
+
+                            <label class="pill">
+                                <input type="radio" name="listing[preferredFor]" value="Anyone"
+                                    <%=preferredFor==='Anyone' ? 'checked' : '' %>>
+                                Anyone
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AMENITIES -->
+                <div class="form-card">
+                    <h3 class="form-section-title">Amenities</h3>
+
+                    <!-- PREDEFINED AMENITIES -->
+                    <div class="checkbox-grid">
+                        <label>
+                            <input type="checkbox" name="listing[amenities][]" value="WiFi" <%=(listing.amenities &&
+                                listing.amenities.includes('WiFi')) ? 'checked' : '' %>> WiFi
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[amenities][]" value="Food" <%=(listing.amenities &&
+                                listing.amenities.includes('Food')) ? 'checked' : '' %>> Food
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[amenities][]" value="Power Backup"
+                                <%=(listing.amenities && listing.amenities.includes('Power Backup')) ? 'checked' : ''
+                                %>> Power Backup
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[amenities][]" value="Parking" <%=(listing.amenities &&
+                                listing.amenities.includes('Parking')) ? 'checked' : '' %>> Parking
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[amenities][]" value="Washing Machine"
+                                <%=(listing.amenities && listing.amenities.includes('Washing Machine')) ? 'checked' : ''
+                                %>> Washing Machine
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[amenities][]" value="CCTV" <%=(listing.amenities &&
+                                listing.amenities.includes('CCTV')) ? 'checked' : '' %>> CCTV
+                        </label>
+                    </div>
+
+                    <!-- CUSTOM AMENITIES -->
+                    <div class="custom-amenities">
+                        <h4 class="mini-title">Add Custom Amenities</h4>
+                        <div id="customAmenities">
+                            <% customAmenities.forEach(a=> { %>
+                                <div class="custom-amenity-row">
+                                    <input type="text" name="listing[amenities][]" value="<%= a %>"
+                                        placeholder="e.g. Gym, Lift, RO Water">
+                                    <button type="button" class="remove-btn">✕</button>
+                                </div>
+                                <% }) %>
+                        </div>
+                        <button type="button" class="secondary-btn" id="addAmenityBtn">
+                            + Add Custom Amenity
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PG RULES -->
+                <div class="form-card">
+                    <h3 class="form-section-title">PG Rules</h3>
+
+                    <!-- PREDEFINED RULES -->
+                    <div class="option-row">
+                        <label>
+                            <input type="checkbox" name="listing[rules][]" value="No Smoking" <%=(listing.rules &&
+                                listing.rules.includes('No Smoking')) ? 'checked' : '' %>> No Smoking
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[rules][]" value="No Alcohol" <%=(listing.rules &&
+                                listing.rules.includes('No Alcohol')) ? 'checked' : '' %>> No Alcohol
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[rules][]" value="No Outside Food" <%=(listing.rules &&
+                                listing.rules.includes('No Outside Food')) ? 'checked' : '' %>> No Outside Food
+                        </label>
+                        <label>
+                            <input type="checkbox" name="listing[rules][]" value="Visitors Allowed" <%=(listing.rules &&
+                                listing.rules.includes('Visitors Allowed')) ? 'checked' : '' %>> Visitors Allowed
+                        </label>
+                    </div>
+
+                    <!-- CUSTOM RULES -->
+                    <div id="customRules">
+                        <% customRules.forEach(r=> { %>
+                            <div class="custom-rule-row">
+                                <input type="text" name="listing[rules][]" value="<%= r %>"
+                                    placeholder="e.g. Silence after 10 PM">
+                                <button type="button" class="remove-btn">✕</button>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <button type="button" class="secondary-btn" id="addRuleBtn">
+                        + Add Custom Rule
+                    </button>
+                </div>
+
+
+                <!-- OWNER CONTACT -->
+                <div class="form-card">
+                    <h3 class="form-section-title">Owner Contact</h3>
+
+                    <div class="form-group">
+                        <label>Owner Name</label>
+                        <input type="text" name="listing[owner][name]" placeholder="e.g. Ramesh Kumar"
+                            value="<%= listing.owner.name %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="listing[owner][phone]" placeholder="10-digit mobile number"
+                            pattern="[0-9]{10}" value="<%= listing.owner.phone %>" required>
+                    </div>
+
+                    <p class="hint-text">
+                        This number will be shown to users for Call & WhatsApp
+                    </p>
+                </div>
+
+
+                <button type="submit" class="primary-btn">Update PG Listing</button>
+
+            </form>
+        </div>
+
+        <!-- CONFIRMATION MODAL -->
+        <div class="confirm-overlay" id="confirmOverlay">
+            <div class="confirm-modal">
+                <div class="confirm-icon">⚠️</div>
+                <h3 class="confirm-title">Confirm Update</h3>
+                <p class="confirm-msg">Please review all details carefully before updating this PG listing.</p>
+                <div class="confirm-actions">
+                    <button class="confirm-cancel" id="confirmCancel">Cancel</button>
+                    <button class="confirm-yes" id="confirmYes">Yes, Update</button>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .confirm-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 9999;
+                justify-content: center;
+                align-items: flex-end;
+                backdrop-filter: blur(4px);
+            }
+
+            .confirm-overlay.active {
+                display: flex;
+            }
+
+            .confirm-modal {
+                background: #fff;
+                width: 100%;
+                max-width: 500px;
+                border-radius: 20px 20px 0 0;
+                padding: 28px 24px 32px;
+                text-align: center;
+                animation: slideUp 0.3s ease;
+            }
+
+            @keyframes slideUp {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .confirm-icon {
+                font-size: 40px;
+                margin-bottom: 12px;
+            }
+
+            .confirm-title {
+                font-size: 18px;
+                font-weight: 700;
+                color: #1a1a2e;
+                margin: 0 0 8px;
+            }
+
+            .confirm-msg {
+                font-size: 14px;
+                color: #666;
+                margin: 0 0 24px;
+                line-height: 1.5;
+            }
+
+            .confirm-actions {
+                display: flex;
+                gap: 12px;
+            }
+
+            .confirm-cancel,
+            .confirm-yes {
+                flex: 1;
+                padding: 14px 0;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 600;
+                cursor: pointer;
+                border: none;
+                transition: all 0.2s ease;
+            }
+
+            .confirm-cancel {
+                background: #f0f0f0;
+                color: #333;
+            }
+
+            .confirm-cancel:active {
+                background: #e0e0e0;
+                transform: scale(0.97);
+            }
+
+            .confirm-yes {
+                background: #e91e7e;
+                color: #fff;
+            }
+
+            .confirm-yes:active {
+                background: #c4196b;
+                transform: scale(0.97);
+            }
+
+            /* Desktop centering */
+            @media (min-width: 500px) {
+                .confirm-overlay {
+                    align-items: center;
+                }
+
+                .confirm-modal {
+                    border-radius: 20px;
+                    max-width: 400px;
+                }
+            }
+        </style>
+
+        <script>
+            const form = document.querySelector('.pg-form');
+            const overlay = document.getElementById('confirmOverlay');
+            const cancelBtn = document.getElementById('confirmCancel');
+            const yesBtn = document.getElementById('confirmYes');
+
+            // Show modal on form submit
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                overlay.classList.add('active');
+            });
+
+            // Cancel — close modal
+            cancelBtn.addEventListener('click', () => {
+                overlay.classList.remove('active');
+            });
+
+            // Confirm — submit the form
+            yesBtn.addEventListener('click', () => {
+                overlay.classList.remove('active');
+                form.removeEventListener('submit', arguments.callee);
+                form.submit();
+            });
+
+            // Close modal on overlay tap (outside the modal)
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // Attach remove handlers on existing remove buttons (for pre-filled custom items)
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.image-row, .sharing-row, .custom-amenity-row, .custom-rule-row').remove();
+                });
+            });
+        </script>
