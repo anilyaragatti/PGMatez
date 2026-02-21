@@ -1,0 +1,210 @@
+<% layout('layout/boilerplate') -%>
+
+    <div class="form-page">
+
+        <!-- PAGE TITLE -->
+        <h2 class="page-title">Edit Profile</h2>
+
+        <form action="/users/<%= user._id %>?_method=PUT" method="POST" class="pg-form">
+
+            <!-- PERSONAL INFO -->
+            <div class="form-card">
+                <h3 class="form-section-title">Personal Info</h3>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="user[name]" placeholder="e.g. Anil Kumar" value="<%= user.name %>"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="user[email]" placeholder="e.g. anil@gmail.com" value="<%= user.email %>"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="user[phone]" placeholder="10-digit mobile number" pattern="[0-9]{10}"
+                        value="<%= user.phone || '' %>">
+                </div>
+            </div>
+
+            <!-- ROLE & BIO -->
+            <div class="form-card">
+                <h3 class="form-section-title">About You</h3>
+
+                <div class="form-group">
+                    <label>I am a</label>
+                    <div class="pill-row">
+                        <label class="pill">
+                            <input type="radio" name="user[role]" value="tenant" <%=user.role==='tenant' ? 'checked'
+                                : '' %> required>
+                            Tenant
+                        </label>
+                        <label class="pill">
+                            <input type="radio" name="user[role]" value="owner" <%=user.role==='owner' ? 'checked' : ''
+                                %>>
+                            Owner
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea name="user[bio]" rows="3"
+                        placeholder="Tell us a little about yourself..."><%= user.bio || '' %></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="primary-btn">Update Profile</button>
+
+        </form>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-modal">
+            <div class="confirm-icon">✏️</div>
+            <h3 class="confirm-title">Confirm Update</h3>
+            <p class="confirm-msg">Are you sure you want to update your profile?</p>
+            <div class="confirm-actions">
+                <button class="confirm-cancel" id="confirmCancel">Cancel</button>
+                <button class="confirm-yes" id="confirmYes">Yes, Update</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: flex-end;
+            backdrop-filter: blur(4px);
+        }
+
+        .confirm-overlay.active {
+            display: flex;
+        }
+
+        .confirm-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px 20px 0 0;
+            padding: 28px 24px 32px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .confirm-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .confirm-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0 0 8px;
+        }
+
+        .confirm-msg {
+            font-size: 14px;
+            color: #666;
+            margin: 0 0 24px;
+            line-height: 1.5;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .confirm-cancel,
+        .confirm-yes {
+            flex: 1;
+            padding: 14px 0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .confirm-cancel {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .confirm-cancel:active {
+            background: #e0e0e0;
+            transform: scale(0.97);
+        }
+
+        .confirm-yes {
+            background: #e91e7e;
+            color: #fff;
+        }
+
+        .confirm-yes:active {
+            background: #c4196b;
+            transform: scale(0.97);
+        }
+
+        @media (min-width: 500px) {
+            .confirm-overlay {
+                align-items: center;
+            }
+
+            .confirm-modal {
+                border-radius: 20px;
+                max-width: 400px;
+            }
+        }
+    </style>
+
+    <script>
+        const form = document.querySelector('.pg-form');
+        const overlay = document.getElementById('confirmOverlay');
+        const cancelBtn = document.getElementById('confirmCancel');
+        const yesBtn = document.getElementById('confirmYes');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            overlay.classList.add('active');
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            overlay.classList.remove('active');
+        });
+
+        yesBtn.addEventListener('click', () => {
+            overlay.classList.remove('active');
+            form.submit();
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('active');
+        });
+    </script>

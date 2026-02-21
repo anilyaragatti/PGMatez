@@ -1,0 +1,57 @@
+<% layout('layout/boilerplate') -%>
+
+    <div class="form-page">
+
+        <!-- PAGE TITLE -->
+        <h2 class="page-title">Create Profile</h2>
+
+        <form action="/users" method="POST" class="pg-form">
+
+            <!-- PERSONAL INFO -->
+            <div class="form-card">
+                <h3 class="form-section-title">Personal Info</h3>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="user[name]" placeholder="e.g. Anil Kumar" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="user[email]" placeholder="e.g. anil@gmail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="user[phone]" placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                </div>
+            </div>
+
+            <!-- ROLE & BIO -->
+            <div class="form-card">
+                <h3 class="form-section-title">About You</h3>
+
+                <div class="form-group">
+                    <label>I am a</label>
+                    <div class="pill-row">
+                        <label class="pill">
+                            <input type="radio" name="user[role]" value="tenant" checked required>
+                            Tenant
+                        </label>
+                        <label class="pill">
+                            <input type="radio" name="user[role]" value="owner">
+                            Owner
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea name="user[bio]" rows="3" placeholder="Tell us a little about yourself..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="primary-btn">Create Profile</button>
+
+        </form>
+    </div>

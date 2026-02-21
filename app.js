@@ -2,6 +2,7 @@ const express = require("express")
 const app = express();
 const mongoose = require('mongoose');
 const Listing = require("./models/listing");
+const User = require("./models/user");
 const path = require("path");
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
@@ -29,6 +30,8 @@ async function main() {
   await mongoose.connect('mongodb://127.0.0.1:27017/PGMate');
 }
 
+// ============ LISTING ROUTES ============
+
 //index route
 app.get("/listing", async (req, res) => {
   const allListing = await Listing.find({});
@@ -45,11 +48,40 @@ app.get("/saved", (req, res) => {
   res.render("listings/saved");
 });
 
-//profile route
-app.get("/profile", (req, res) => {
-  res.render("listings/profile");
+// ============ USER ROUTES ============
+
+//user - new form
+app.get("/users/new", (req, res) => {
+  res.render("users/new");
 });
 
+//user - create
+app.post("/users", async (req, res) => {
+  const newUser = new User(req.body.user);
+  await newUser.save();
+  res.redirect(`/users/${newUser._id}`);
+});
+
+//user - show profile
+app.get("/users/:id", async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.render("users/show", { user });
+});
+
+//user - edit form
+app.get("/users/:id/edit", async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.render("users/edit", { user });
+});
+
+//user - update
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  await User.findByIdAndUpdate(id, req.body.user);
+  res.redirect(`/users/${id}`);
+});
+
+// ============ LISTING ROUTES (continued) ============
 
 // show route
 app.get("/listing/:id", async (req, res) => {

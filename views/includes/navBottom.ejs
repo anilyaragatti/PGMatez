@@ -7,7 +7,7 @@
     <i class="fa-regular fa-heart"></i>
   </a>
 
-  <a href="/profile" class="f-nav-list" data-route="/profile">
+  <a href="/users/new" class="f-nav-list" data-route="/users">
     <i class="fa-solid fa-user"></i>
   </a>
 </div>
@@ -15,20 +15,17 @@
 
 
 
-  
- <script>
-   const currentPath = window.location.pathname;
-const navItems = document.querySelectorAll(".f-nav-list");
 
-navItems.forEach(item => {
-  if (currentPath.startsWith(item.dataset.route)) {
-    item.classList.add("active");
-  } else {
-    item.classList.remove("active");
-  }
-});
+<script>
+  const currentPath = window.location.pathname;
+  const navItems = document.querySelectorAll(".f-nav-list");
+
+  navItems.forEach(item => {
+    if (currentPath.startsWith(item.dataset.route)) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
 
 </script>
-
-
- 
